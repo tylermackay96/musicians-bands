@@ -13,12 +13,21 @@ describe('Band and Musician Models', () => {
     })
 
     test('can create a Band', async () => {
-        // TODO - test creating a band
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
-    })
+        const band = await Band.create({
+          name: 'Metallica',
+          genre: 'Metal'
+        });
+        expect(band.name).toBe('Metallica');
+        expect(band.genre).toBe('Metal');
+      });
+      
 
     test('can create a Musician', async () => {
-        // TODO - test creating a musician
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
-    })
+        const musician = await Band.create({
+            name: 'Steve Gary',
+            instrument: 'Trumpet'
+          });
+          expect(band.name).toBe('Steve Gary');
+          expect(band.instrument).toBe('Trumpet');
+          })
 })

@@ -56,3 +56,45 @@ describe('Band model', () => {
     expect(musicians[1].name).toBe('Brian Johnson');
   });
 });
+
+describe('Band and Song models', () => {
+  beforeAll(async () => {
+    // synchronize the models with the database
+    await sequelize.sync({ force: true });
+  });
+
+  it('should have a many-to-many association', async () => {
+    // create two bands
+    const band1 = await Band.create({ name: 'AC/DC' });
+    const band2 = await Band.create({ name: 'Guns N\' Roses' });
+
+    // create a song
+    const song = await Song.create({ title: 'Back in Black' });
+
+    // associate both bands with the song
+    await band1.addSong(song);
+    await band2.addSong(song);
+
+    // retrieve the bands associated with the song
+    const bands = await song.getBands();
+
+    // check that the song is associated with both bands
+    expect(Array.isArray(bands)).toBe(true);
+    expect(bands.length).toBe(2);
+    expect(bands[0].name).toBe('AC/DC');
+    expect(bands[1].name).toBe('Guns N\' Roses');
+
+    // retrieve the songs associated with each band
+    const songs1 = await band1.getSongs();
+    const songs2 = await band2.getSongs();
+
+    // check that each band is associated with the song
+    expect(Array.isArray(songs1)).toBe(true);
+    expect(songs1.length).toBe(1);
+    expect(songs1[0].title).toBe('Back in Black');
+
+    expect(Array.isArray(songs2)).toBe(true);
+    expect(songs2.length).toBe(1);
+    expect(songs2[0].title).toBe('Back in Black');
+  });
+});

@@ -31,3 +31,28 @@ describe('Band and Musician Models', () => {
           expect(band.instrument).toBe('Trumpet');
           })
 })
+
+describe('Band model', () => {
+  beforeAll(async () => {
+    // synchronize the models with the database
+    await sequelize.sync({ force: true });
+  });
+
+  it('should have a hasMany association with Musician', async () => {
+    // create a new band
+    const band = await Band.create({ name: 'AC/DC' });
+
+    // add two musicians to the band
+    await Musician.create({ name: 'Angus Young', instrument: 'guitar', bandId: band.id });
+    await Musician.create({ name: 'Brian Johnson', instrument: 'vocals', bandId: band.id });
+
+    // retrieve the musicians associated with the band
+    const musicians = await band.getMusicians();
+
+    // check that the musicians property returns an array of the added musicians
+    expect(Array.isArray(musicians)).toBe(true);
+    expect(musicians.length).toBe(2);
+    expect(musicians[0].name).toBe('Angus Young');
+    expect(musicians[1].name).toBe('Brian Johnson');
+  });
+});

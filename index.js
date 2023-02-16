@@ -16,5 +16,24 @@ SongBand.init({}, { sequelize, modelName: 'songBand' });
 Band.belongsToMany(Song, { through: SongBand });
 Song.belongsToMany(Band, { through: SongBand });
 
+Post.findAll({
+    include: [
+      { model: User, as: 'author' }
+    ]
+  });
+
+  const eagarLoad = await Band.findAll({
+    include: [
+      {
+        model: Musician
+      },
+      {
+        model: Song
+      }
+    ]
+  });
+   console.log(eagarLoad)
+   
+
 // export the models
 module.exports = { Band, Song, Musician };
